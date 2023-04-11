@@ -4,9 +4,16 @@ import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 
 const Signup = ({ login }) => {
+  const validEmail = new RegExp(
+    '^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'
+    // '/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i'
+ );
+  const validName = new RegExp(
+    '^[a-zA-Z]+ [a-zA-Z]+$'
+  );
   const navigate = useNavigate();
   const [success, setSuccess] = useState(null);
-
+  const [error, setError] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -16,23 +23,34 @@ const Signup = ({ login }) => {
       'username',
       'password',
     ].map((field) => formData.get(field));
-    axios
-      .post(`http://localhost:5000/api/v1/users`, {
-        name,
-        email,
-        username,
-        password,
-        previous_login: new Date(),
-      })
-      .then((res) => {
-        setSuccess(true);
-        login(res.data.user);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.log(error);
-        setSuccess(false);
-      });
+    console.log(validName.test(name))
+   
+    if (name == "" || email == "" || username == "" || password == "") {
+      setError("Fields Should not be null");
+    } else if(!validName.test(name)){
+      
+       setError("Only Letters allowed")
+     }
+    else{
+  
+      axios
+        .post(`http://localhost:5000/api/v1/users`, {
+          name,
+          email,
+          username,
+          password,
+          previous_login: new Date(),
+        })
+        .then((res) => {
+          setSuccess(true);
+          login(res.data.user);
+          navigate('/');
+        })
+        .catch((error) => {
+          console.log(error);
+          setSuccess(false);
+        });
+      }
   };
 
   return (
@@ -48,6 +66,9 @@ const Signup = ({ login }) => {
     >
       <h1>Create Account</h1>
       <Form style={{ width: '30rem' }} onSubmit={handleSubmit}>
+      {error && <Form.Text style={{ color: 'red' }}>
+          {error}
+        </Form.Text>}
         <Form.Group className='mb-3'>
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -107,6 +128,7 @@ const Signup = ({ login }) => {
         <Button variant='primary' type='submit'>
           Submit
         </Button>
+       
       </Form>
     </div>
   );
