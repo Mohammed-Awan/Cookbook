@@ -7,7 +7,7 @@ const Home = () => {
       <div
         style={{
           display: 'flex',
-          paddingTop: '10rem',
+          paddingTop: '5rem',
           paddingLeft: '7rem',
         }}
       >

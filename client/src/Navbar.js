@@ -3,6 +3,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 
 const MyNavbar = ({ user, logout }) => {
+  let role;
+  if(user){
+    role=user.role
+    console.log(role)
+  }
   return (
     <>
       <Navbar
@@ -31,7 +36,7 @@ const MyNavbar = ({ user, logout }) => {
                   </Link>
                 </Nav>
                 <Nav />
-                {user && (
+                {role==0 && (
                   <Nav>
                     <Link
                       to='mycookbook'
