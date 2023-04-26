@@ -12,6 +12,9 @@ const Signup = ({ login }) => {
  const validPass = new RegExp(
   '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'
  )
+ const validName = new RegExp(
+  '^[A-Za-z]+$'
+ )
   const navigate = useNavigate();
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState("");
@@ -31,6 +34,9 @@ const Signup = ({ login }) => {
     else if(!validPass.test(password))
     {
       setError("Password must contain atleast 8 characters (1 Uppercase,1 Lowercase, 1 Special Character)");
+    }
+    else if(!validName.test(name)){
+      setError("Only Letters Allowed in Name")
     }
     else{
       axios
