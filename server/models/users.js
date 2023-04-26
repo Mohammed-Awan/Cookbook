@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const RecipesSchema = require('./recipes');
 
 const noWhitespace = (str) => {
-  console.log(str);
+  console.log(str); 
   str.indexOf(' ') == -1};
 
 const UsersSchema = new mongoose.Schema({
@@ -44,6 +44,10 @@ const UsersSchema = new mongoose.Schema({
     default: new Date(),
   },
   recipes: [RecipesSchema],
+  role:{
+    type:String,
+  }
+
 });
 
 module.exports = mongoose.model('Users', UsersSchema);

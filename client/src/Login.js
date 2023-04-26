@@ -20,8 +20,9 @@ const Login = ({ login }) => {
       })
       .then((res) => {
         setSuccess(true);
+        console.log(res.data.user)
         login(res.data.user);
-        navigate('/mycookbook');
+        navigate('/browse');
       })
       .catch((error) => {
         setSuccess(false);

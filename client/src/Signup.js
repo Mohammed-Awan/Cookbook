@@ -8,9 +8,10 @@ const Signup = ({ login }) => {
     '^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'
     // '/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i'
  );
-  const validName = new RegExp(
-    '^[a-zA-Z]+ [a-zA-Z]+$'
-  );
+
+ const validPass = new RegExp(
+  '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'
+ )
   const navigate = useNavigate();
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState("");
@@ -23,16 +24,15 @@ const Signup = ({ login }) => {
       'username',
       'password',
     ].map((field) => formData.get(field));
-    console.log(validName.test(name))
-   
-    if (name == "" || email == "" || username == "" || password == "") {
-      setError("Fields Should not be null");
-    } else if(!validName.test(name)){
-      
-       setError("Only Letters allowed")
-     }
+   let role=1;
+    if(!validEmail.test(email)){
+      setError("Invalid Email ID");
+    }
+    else if(!validPass.test(password))
+    {
+      setError("Password must contain atleast 8 characters (1 Uppercase,1 Lowercase, 1 Special Character)");
+    }
     else{
-  
       axios
         .post(`http://localhost:5000/api/v1/users`, {
           name,
@@ -40,6 +40,7 @@ const Signup = ({ login }) => {
           username,
           password,
           previous_login: new Date(),
+          role
         })
         .then((res) => {
           setSuccess(true);
@@ -50,7 +51,7 @@ const Signup = ({ login }) => {
           console.log(error);
           setSuccess(false);
         });
-      }
+     }
   };
 
   return (
@@ -61,7 +62,6 @@ const Signup = ({ login }) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '10%',
       }}
     >
       <h1>Create Account</h1>
